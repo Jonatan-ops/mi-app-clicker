@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michi Gym Tycoon</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Load Utils Globally as standard scripts -->
+    <script src="./src/utils/math.js" type="module"></script>
+    <script src="./src/utils/storage.js" type="module"></script>
+    <script src="./src/data/initialState.js" type="module"></script>
+
+    <style>
+        /* Base styles just in case style.css fails to load */
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f4f8; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- Load our App -->
+    <script type="text/babel" data-type="module" src="./src/main.jsx"></script>
+</body>
+</html>
