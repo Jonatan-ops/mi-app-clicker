@@ -1,44 +1,16 @@
-127.0.0.1 - - [05/Jan/2026 20:40:04] "GET /index.html HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:41:49] "GET /src/main.jsx HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:42:44] "GET /index.html HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:42:44] "GET /style.css HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:42:45] "GET /src/main.jsx HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:42:46] code 404, message File not found
-127.0.0.1 - - [05/Jan/2026 20:42:46] "GET /data/initialState.js HTTP/1.1" 404 -
-127.0.0.1 - - [05/Jan/2026 20:42:46] code 404, message File not found
-127.0.0.1 - - [05/Jan/2026 20:42:46] "GET /utils/storage.js HTTP/1.1" 404 -
-127.0.0.1 - - [05/Jan/2026 20:42:46] code 404, message File not found
-127.0.0.1 - - [05/Jan/2026 20:42:46] "GET /utils/math.js HTTP/1.1" 404 -
-127.0.0.1 - - [05/Jan/2026 20:43:25] "GET /index.html HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:43:35] "GET /src/main.jsx HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:43:47] "GET /index.html HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:43:47] "GET /style.css HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:43:47] "GET /src/main.jsx HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:43:48] code 404, message File not found
-127.0.0.1 - - [05/Jan/2026 20:43:48] "GET /data/initialState.js HTTP/1.1" 404 -
-127.0.0.1 - - [05/Jan/2026 20:43:48] code 404, message File not found
-127.0.0.1 - - [05/Jan/2026 20:43:48] "GET /utils/storage.js HTTP/1.1" 404 -
-127.0.0.1 - - [05/Jan/2026 20:43:48] code 404, message File not found
-127.0.0.1 - - [05/Jan/2026 20:43:48] "GET /utils/math.js HTTP/1.1" 404 -
-127.0.0.1 - - [05/Jan/2026 20:44:27] "GET /src/utils/math.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:44:54] "GET /index.html HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:44:54] "GET /style.css HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:44:55] "GET /src/main.jsx HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:44:55] code 404, message File not found
-127.0.0.1 - - [05/Jan/2026 20:44:55] "GET /utils/storage.js HTTP/1.1" 404 -
-127.0.0.1 - - [05/Jan/2026 20:44:55] code 404, message File not found
-127.0.0.1 - - [05/Jan/2026 20:44:55] "GET /data/initialState.js HTTP/1.1" 404 -
-127.0.0.1 - - [05/Jan/2026 20:44:55] code 404, message File not found
-127.0.0.1 - - [05/Jan/2026 20:44:55] "GET /utils/math.js HTTP/1.1" 404 -
-127.0.0.1 - - [05/Jan/2026 20:46:21] "GET /index.html HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:46:21] "GET /style.css HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:46:21] "GET /src/utils/math.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:46:21] "GET /src/utils/storage.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:46:21] "GET /src/data/initialState.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:46:21] "GET /src/main.jsx HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:49:09] "GET /index.html HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:49:09] "GET /src/data/initialState.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:49:09] "GET /src/utils/storage.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:49:09] "GET /style.css HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:49:09] "GET /src/utils/math.js HTTP/1.1" 200 -
-127.0.0.1 - - [05/Jan/2026 20:49:10] "GET /src/main.jsx HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:09] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:09] "GET /style.css HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:10] "GET /src/App.jsx HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:10] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:10] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:10] "GET /manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:10] "GET /icon-192.png HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:10] "GET /icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:43] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:43] "GET /style.css HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:44] "GET /src/App.jsx HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:44] "GET /sw.js HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:44] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:44] "GET /manifest.json HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:44] "GET /icon-512.png HTTP/1.1" 200 -
+127.0.0.1 - - [30/Mar/2026 02:21:44] "GET /icon-192.png HTTP/1.1" 200 -

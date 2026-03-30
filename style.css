@@ -1,85 +1,70 @@
+/* style.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;700;900&display=swap');
+
+:root {
+  /* Prevent pull-to-refresh on mobile */
+  overscroll-behavior-y: none;
+}
+
 body {
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: #f0f8ff; /* Light blue background */
-    color: #333;
-    overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  /* Soft background for out-of-bounds area */
+  background-color: #f1f5f9; /* Tailwind slate-100 */
+
+  /* Disable text selection everywhere for an app-like feel */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
+h1, h2, h3, h4, h5, h6, .display-font {
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Base styles for the app container */
 #root {
-    max-width: 480px; /* Mobile width simulation */
-    margin: 0 auto;
-    background-color: #ffffff;
-    min-height: 100vh;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
+  /* Ensures it behaves like a native app view */
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Utilities */
-.flex { display: flex; }
-.flex-col { display: flex; flex-direction: column; }
-.justify-between { justify-content: space-between; }
-.items-center { align-items: center; }
-.p-2 { padding: 0.5rem; }
-.p-4 { padding: 1rem; }
-.text-center { text-align: center; }
-.font-bold { font-weight: bold; }
-
-/* Colors */
-.text-orange { color: #FF9F43; }
-.bg-orange { background-color: #FF9F43; }
-.text-cyan { color: #48DBFB; }
-.bg-cyan { background-color: #48DBFB; }
-.bg-green { background-color: #2ecc71; }
-.text-white { color: #fff; }
-
-/* Components */
-.btn {
-    border: none;
-    border-radius: 8px;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: transform 0.1s;
-}
-.btn:active { transform: scale(0.95); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    border: 1px solid #eee;
+/* Custom Scrollbar for history if needed */
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-.machine-icon {
-    width: 60px;
-    height: 60px;
-    background-color: #eee;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    margin-right: 12px;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.progress-bar {
-    height: 8px;
-    background-color: #eee;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-top: 8px;
-    width: 100%;
-}
-.progress-fill {
-    height: 100%;
-    background-color: #48DBFB;
-    transition: width 0.1s linear;
+::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1; /* slate-300 */
+  border-radius: 10px;
 }
 
-.currency-icon { margin-right: 4px; }
+/* Smooth transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* Keypad button pressed state */
+.keypad-btn:active {
+    transform: scale(0.95);
+    background-color: #e2e8f0; /* slate-200 */
+}
+
+/* Score animation */
+@keyframes scoreBump {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); color: #0f766e; }
+    100% { transform: scale(1); }
+}
+
+.score-bump {
+    animation: scoreBump 0.3s ease-out;
+}
