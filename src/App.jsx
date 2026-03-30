@@ -4,7 +4,8 @@ const { useState, useEffect, useRef } = React;
 // We rely on window.lucide if Lucide React is not directly imported in Standalone
 // For simplicity in Babel standalone with CDN, we'll use SVGs directly or a simple wrapper.
 
-const MAX_SCORE = 200;
+// Score targets available
+const SCORE_TARGETS = [100, 150, 200, 250, 500];
 
 // Reusable SVG Icons
 const Icons = {
@@ -17,14 +18,17 @@ const Icons = {
     Trophy: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
 };
 
-const Header = ({ onOpenSettings, onOpenHistory, matchCount }) => (
-    <header className="flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-sm z-10 border-b border-slate-100 shadow-sm">
+const Header = ({ onOpenSettings, onOpenHistory, matchCount, targetScore }) => (
+    <header className="flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-sm z-10 border-b border-slate-100 shadow-sm relative">
         <button onClick={onOpenSettings} className="p-2 text-slate-400 hover:text-domino-600 transition-colors rounded-full hover:bg-slate-50">
             <Icons.Settings />
         </button>
         <div className="flex flex-col items-center">
-            <h1 className="text-xl font-bold text-slate-800 tracking-tight">Dominó <span className="text-domino-600">200</span></h1>
-            {matchCount > 0 && <span className="text-xs text-slate-400 font-medium tracking-wide uppercase">Partida {matchCount + 1}</span>}
+            <h1 className="text-xl font-bold text-slate-800 tracking-tight">Dominó <span className="text-domino-600">Tracker</span></h1>
+            <div className="flex items-center gap-2 mt-0.5">
+                <span className="bg-domino-100 text-domino-700 text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wider uppercase">Meta: {targetScore}</span>
+                {matchCount > 0 && <span className="text-xs text-slate-400 font-medium tracking-wide uppercase">Partida {matchCount + 1}</span>}
+            </div>
         </div>
         <button onClick={onOpenHistory} className="p-2 text-slate-400 hover:text-domino-600 transition-colors rounded-full hover:bg-slate-50 relative">
             <Icons.History />
@@ -35,10 +39,10 @@ const Header = ({ onOpenSettings, onOpenHistory, matchCount }) => (
     </header>
 );
 
-const ScoreBoard = ({ teamA, teamB, scoreA, scoreB, activeTeam, setActiveTeam, onOpenRounds }) => {
+const ScoreBoard = ({ teamA, teamB, scoreA, scoreB, activeTeam, setActiveTeam, onOpenRounds, targetScore }) => {
     // Determine winner early for styling
-    const percentA = Math.min((scoreA / MAX_SCORE) * 100, 100);
-    const percentB = Math.min((scoreB / MAX_SCORE) * 100, 100);
+    const percentA = Math.min((scoreA / targetScore) * 100, 100);
+    const percentB = Math.min((scoreB / targetScore) * 100, 100);
 
     return (
         <div className="flex-1 flex flex-col justify-center px-6 py-4 gap-6">
@@ -215,51 +219,88 @@ const Modal = ({ isOpen, onClose, title, children }) => {
     );
 };
 
-const SettingsModal = ({ isOpen, onClose, teamA, teamB, updateTeams }) => {
+const SettingsModal = ({ isOpen, onClose, teamA, teamB, updateTeams, currentTargetScore, onFullReset }) => {
     const [nameA, setNameA] = useState(teamA.name);
     const [nameB, setNameB] = useState(teamB.name);
+    const [selectedTarget, setSelectedTarget] = useState(currentTargetScore);
 
     useEffect(() => {
         if (isOpen) {
             setNameA(teamA.name);
             setNameB(teamB.name);
+            setSelectedTarget(currentTargetScore);
         }
-    }, [isOpen, teamA, teamB]);
+    }, [isOpen, teamA, teamB, currentTargetScore]);
 
     const handleSave = () => {
-        updateTeams(nameA || 'Equipo A', nameB || 'Equipo B');
+        updateTeams(nameA || 'Equipo A', nameB || 'Equipo B', selectedTarget);
         onClose();
     };
 
+    const confirmFullReset = () => {
+        if (window.confirm("¿Estás seguro de que quieres borrar el historial, puntuaciones y nombres? Esto es irreversible.")) {
+            onFullReset();
+            onClose();
+        }
+    };
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="Configurar Equipos">
-            <div className="space-y-6">
+        <Modal isOpen={isOpen} onClose={onClose} title="Configuración">
+            <div className="space-y-6 pb-4">
                 <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-600 uppercase tracking-wider">Equipo 1</label>
-                    <input
-                        type="text"
-                        value={nameA}
-                        onChange={e => setNameA(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-domino-500 focus:border-transparent transition-all"
-                        placeholder="Ej. Los Primos"
-                    />
+                    <label className="text-sm font-semibold text-slate-600 uppercase tracking-wider">Nombres de Equipos</label>
+                    <div className="grid grid-cols-2 gap-3">
+                        <input
+                            type="text"
+                            value={nameA}
+                            onChange={e => setNameA(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-domino-500 focus:border-transparent transition-all"
+                            placeholder="Ej. Nosotros"
+                        />
+                        <input
+                            type="text"
+                            value={nameB}
+                            onChange={e => setNameB(e.target.value)}
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-domino-500 focus:border-transparent transition-all"
+                            placeholder="Ej. Ellos"
+                        />
+                    </div>
                 </div>
-                <div className="space-y-2">
-                    <label className="text-sm font-semibold text-slate-600 uppercase tracking-wider">Equipo 2</label>
-                    <input
-                        type="text"
-                        value={nameB}
-                        onChange={e => setNameB(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-domino-500 focus:border-transparent transition-all"
-                        placeholder="Ej. Los Tíos"
-                    />
+
+                <div className="space-y-3">
+                    <label className="text-sm font-semibold text-slate-600 uppercase tracking-wider">Meta de Puntos</label>
+                    <div className="flex flex-wrap gap-2">
+                        {SCORE_TARGETS.map(score => (
+                            <button
+                                key={score}
+                                onClick={() => setSelectedTarget(score)}
+                                className={`flex-1 min-w-[3rem] py-2 px-3 rounded-lg font-bold transition-all ${
+                                    selectedTarget === score
+                                    ? 'bg-domino-600 text-white shadow-md shadow-domino-600/30'
+                                    : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                                }`}
+                            >
+                                {score}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-                <button
-                    onClick={handleSave}
-                    className="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 rounded-xl shadow-lg shadow-slate-900/20 transition-all active:scale-[0.98]"
-                >
-                    Guardar Cambios
-                </button>
+
+                <div className="pt-4 space-y-3">
+                    <button
+                        onClick={handleSave}
+                        className="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 rounded-xl shadow-lg shadow-slate-900/20 transition-all active:scale-[0.98]"
+                    >
+                        Guardar Cambios
+                    </button>
+
+                    <button
+                        onClick={confirmFullReset}
+                        className="w-full bg-red-50 hover:bg-red-100 text-red-600 font-bold py-3 rounded-xl transition-all active:scale-[0.98] border border-red-200"
+                    >
+                        Reiniciar Todo (Empezar de 0)
+                    </button>
+                </div>
             </div>
         </Modal>
     );
@@ -377,7 +418,7 @@ const RoundsModal = ({ isOpen, onClose, rounds, teamA, teamB }) => {
     );
 };
 
-const VictoryModal = ({ winner, isOpen, onReset, onChangeTeams }) => {
+const VictoryModal = ({ winner, isOpen, onReset, onChangeTeams, targetScore }) => {
     if (!isOpen) return null;
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-md p-6 animate-in fade-in zoom-in duration-300">
@@ -391,7 +432,7 @@ const VictoryModal = ({ winner, isOpen, onReset, onChangeTeams }) => {
 
                 <h2 className="text-3xl font-black text-slate-800 display-font mb-2">¡Victoria!</h2>
                 <p className="text-lg text-slate-600 mb-8 font-medium">
-                    <span className="text-domino-600 font-bold">{winner}</span> ha alcanzado los {MAX_SCORE} puntos.
+                    <span className="text-domino-600 font-bold">{winner}</span> ha alcanzado los {targetScore} puntos.
                 </p>
 
                 <div className="space-y-3 relative z-10">
@@ -421,7 +462,8 @@ window.App = () => {
         teamB: { name: 'Ellos', score: 0 },
         history: [], // Overall match history
         currentRounds: [], // Tracks points added in the current match: [{ team: 'A', points: 25, totalA: 25, totalB: 0 }]
-        activeTeam: 'A' // 'A' or 'B'
+        activeTeam: 'A', // 'A' or 'B'
+        targetScore: 200 // Default goal
     };
 
     const [state, setState] = useState(() => {
@@ -443,13 +485,16 @@ window.App = () => {
     useEffect(() => {
         localStorage.setItem('domino200_state', JSON.stringify(state));
 
+        // Ensure a target score is always set (for backward compatibility if user already has saved state)
+        const currentTarget = state.targetScore || 200;
+
         // Check victory condition
-        if (state.teamA.score >= MAX_SCORE && !victoryData) {
+        if (state.teamA.score >= currentTarget && !victoryData) {
             handleVictory(state.teamA.name);
-        } else if (state.teamB.score >= MAX_SCORE && !victoryData) {
+        } else if (state.teamB.score >= currentTarget && !victoryData) {
             handleVictory(state.teamB.name);
         }
-    }, [state]);
+    }, [state, victoryData]);
 
     const handleVictory = (winnerName) => {
         setVictoryData({ winner: winnerName });
@@ -508,12 +553,19 @@ window.App = () => {
         setCurrentInput('');
     };
 
-    const updateTeams = (nameA, nameB) => {
+    const updateTeams = (nameA, nameB, newTarget) => {
         setState(prev => ({
             ...prev,
             teamA: { ...prev.teamA, name: nameA },
-            teamB: { ...prev.teamB, name: nameB }
+            teamB: { ...prev.teamB, name: nameB },
+            targetScore: newTarget
         }));
+    };
+
+    const handleFullReset = () => {
+        setState({ ...initialState });
+        setVictoryData(null);
+        setCurrentInput('');
     };
 
     const resetScores = () => {
@@ -539,6 +591,7 @@ window.App = () => {
                 onOpenSettings={() => setIsSettingsOpen(true)}
                 onOpenHistory={() => setIsHistoryOpen(true)}
                 matchCount={state.history.length}
+                targetScore={state.targetScore || 200}
             />
 
             <ScoreBoard
@@ -549,6 +602,7 @@ window.App = () => {
                 activeTeam={state.activeTeam}
                 setActiveTeam={(t) => setState(prev => ({ ...prev, activeTeam: t }))}
                 onOpenRounds={() => setIsRoundsOpen(true)}
+                targetScore={state.targetScore || 200}
             />
 
             <Keypad
@@ -564,6 +618,8 @@ window.App = () => {
                 teamA={state.teamA}
                 teamB={state.teamB}
                 updateTeams={updateTeams}
+                currentTargetScore={state.targetScore || 200}
+                onFullReset={handleFullReset}
             />
 
             <HistoryModal
@@ -587,6 +643,7 @@ window.App = () => {
                 winner={victoryData?.winner}
                 onReset={resetScores}
                 onChangeTeams={handleChangeTeams}
+                targetScore={state.targetScore || 200}
             />
         </>
     );

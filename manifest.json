@@ -1,6 +1,6 @@
 {
-  "name": "Dominó 200",
-  "short_name": "Dominó 200",
+  "name": "Dominó Tracker",
+  "short_name": "Dominó",
   "description": "App para registrar puntuaciones de dominó",
   "start_url": "./index.html",
   "display": "standalone",
