@@ -12,6 +12,7 @@ const Icons = {
     Camera: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>,
     Undo: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>,
     History: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>,
+    List: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>,
     X: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>,
     Trophy: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
 };
@@ -34,7 +35,7 @@ const Header = ({ onOpenSettings, onOpenHistory, matchCount }) => (
     </header>
 );
 
-const ScoreBoard = ({ teamA, teamB, scoreA, scoreB, activeTeam, setActiveTeam }) => {
+const ScoreBoard = ({ teamA, teamB, scoreA, scoreB, activeTeam, setActiveTeam, onOpenRounds }) => {
     // Determine winner early for styling
     const percentA = Math.min((scoreA / MAX_SCORE) * 100, 100);
     const percentB = Math.min((scoreB / MAX_SCORE) * 100, 100);
@@ -64,9 +65,15 @@ const ScoreBoard = ({ teamA, teamB, scoreA, scoreB, activeTeam, setActiveTeam })
                 </div>
             </div>
 
-            {/* VS Divider */}
+            {/* VS Divider & Rounds Button */}
             <div className="flex items-center justify-center -my-2 relative z-10">
-                <div className="bg-white px-4 py-1.5 rounded-full text-xs font-bold text-slate-300 border border-slate-100 shadow-sm tracking-widest">VS</div>
+                <button
+                    onClick={onOpenRounds}
+                    className="bg-white hover:bg-slate-50 px-4 py-1.5 rounded-full text-xs font-bold text-slate-400 hover:text-domino-600 border border-slate-100 shadow-sm tracking-widest flex items-center gap-2 transition-colors group"
+                >
+                    <span className="text-slate-300 group-hover:text-domino-400">VS</span>
+                    <Icons.List />
+                </button>
             </div>
 
             {/* Team B */}
@@ -269,22 +276,101 @@ const HistoryModal = ({ isOpen, onClose, history, teamA, teamB }) => {
             ) : (
                 <div className="space-y-4">
                     {history.map((match, index) => (
-                        <div key={index} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
-                                    <Icons.Trophy />
+                        <div key={index} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 flex flex-col gap-3">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
+                                        <Icons.Trophy />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-slate-800">{match.winner}</h4>
+                                        <p className="text-xs text-slate-500">{new Date(match.date).toLocaleDateString()}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 className="font-bold text-slate-800">{match.winner}</h4>
-                                    <p className="text-xs text-slate-500">{new Date(match.date).toLocaleDateString()}</p>
+                                <div className="text-right">
+                                    <div className="font-black display-font text-slate-800">{match.scoreA} - {match.scoreB}</div>
+                                    <div className="text-xs text-slate-400">Puntaje Final</div>
                                 </div>
                             </div>
-                            <div className="text-right">
-                                <div className="font-black display-font text-slate-800">{match.scoreA} - {match.scoreB}</div>
-                                <div className="text-xs text-slate-400">Puntaje Final</div>
-                            </div>
+
+                            {/* Round summary toggle if rounds exist */}
+                            {match.rounds && match.rounds.length > 0 && (
+                                <details className="text-sm bg-white rounded-xl border border-slate-100 overflow-hidden group">
+                                    <summary className="px-4 py-2 text-slate-500 font-medium cursor-pointer hover:bg-slate-50 list-none flex justify-between items-center">
+                                        Ver manos jugadas ({match.rounds.length})
+                                        <span className="text-xs opacity-50 group-open:rotate-180 transition-transform">▼</span>
+                                    </summary>
+                                    <div className="px-4 py-3 border-t border-slate-100 space-y-2 max-h-40 overflow-y-auto">
+                                        {/* Reverse rounds to show chronological order from top to bottom if desired, or keep as is. Our state stores them newest first, so let's reverse for chronological reading here. */}
+                                        {[...match.rounds].reverse().map((round, rIdx) => (
+                                            <div key={round.id} className="flex justify-between items-center text-xs">
+                                                <span className="text-slate-400 w-6">#{rIdx + 1}</span>
+                                                <div className="flex-1 flex justify-center">
+                                                    <span className={`font-bold ${round.team === 'A' ? 'text-domino-600' : 'text-slate-400'}`}>+{round.team === 'A' ? round.points : '0'}</span>
+                                                    <span className="mx-2 text-slate-300">|</span>
+                                                    <span className={`font-bold ${round.team === 'B' ? 'text-domino-600' : 'text-slate-400'}`}>+{round.team === 'B' ? round.points : '0'}</span>
+                                                </div>
+                                                <div className="font-mono text-slate-600 w-16 text-right">
+                                                    {round.totalA} - {round.totalB}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </details>
+                            )}
                         </div>
                     ))}
+                </div>
+            )}
+        </Modal>
+    );
+};
+
+const RoundsModal = ({ isOpen, onClose, rounds, teamA, teamB }) => {
+    return (
+        <Modal isOpen={isOpen} onClose={onClose} title="Rondas de la partida">
+            {!rounds || rounds.length === 0 ? (
+                <div className="text-center py-10 text-slate-400 flex flex-col items-center gap-3">
+                    <Icons.List />
+                    <p>Aún no se han anotado puntos.</p>
+                </div>
+            ) : (
+                <div className="space-y-3">
+                    <div className="flex justify-between items-center px-4 pb-2 border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        <span>Ronda</span>
+                        <div className="flex gap-4">
+                            <span className="w-12 text-center truncate">{teamA.name}</span>
+                            <span className="w-12 text-center truncate">{teamB.name}</span>
+                        </div>
+                        <span className="w-16 text-right">Total</span>
+                    </div>
+
+                    <div className="space-y-2">
+                        {rounds.map((round, index) => {
+                            // Since rounds are stored newest first, the index from bottom is length - index
+                            const roundNum = rounds.length - index;
+                            const isTeamA = round.team === 'A';
+
+                            return (
+                                <div key={round.id} className="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100 text-sm">
+                                    <span className="text-slate-400 font-medium w-8">#{roundNum}</span>
+
+                                    <div className="flex gap-4 font-bold text-lg display-font">
+                                        <span className={`w-12 text-center ${isTeamA ? 'text-domino-600' : 'text-slate-300 font-normal'}`}>
+                                            {isTeamA ? `+${round.points}` : '-'}
+                                        </span>
+                                        <span className={`w-12 text-center ${!isTeamA ? 'text-domino-600' : 'text-slate-300 font-normal'}`}>
+                                            {!isTeamA ? `+${round.points}` : '-'}
+                                        </span>
+                                    </div>
+
+                                    <div className="font-mono font-bold text-slate-700 w-16 text-right bg-white px-2 py-1 rounded shadow-sm border border-slate-100">
+                                        {round.totalA}<span className="text-slate-300 font-normal mx-0.5">-</span>{round.totalB}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             )}
         </Modal>
@@ -333,7 +419,8 @@ window.App = () => {
     const initialState = {
         teamA: { name: 'Nosotros', score: 0 },
         teamB: { name: 'Ellos', score: 0 },
-        history: [],
+        history: [], // Overall match history
+        currentRounds: [], // Tracks points added in the current match: [{ team: 'A', points: 25, totalA: 25, totalB: 0 }]
         activeTeam: 'A' // 'A' or 'B'
     };
 
@@ -349,6 +436,7 @@ window.App = () => {
     const [currentInput, setCurrentInput] = useState('');
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+    const [isRoundsOpen, setIsRoundsOpen] = useState(false);
     const [victoryData, setVictoryData] = useState(null); // { winner: string }
 
     // Save to local storage whenever state changes
@@ -371,7 +459,8 @@ window.App = () => {
             winner: winnerName,
             scoreA: state.teamA.score,
             scoreB: state.teamB.score,
-            date: new Date().toISOString()
+            date: new Date().toISOString(),
+            rounds: state.currentRounds || [] // Save the breakdown
         };
 
         setState(prev => ({
@@ -385,12 +474,24 @@ window.App = () => {
 
         setState(prev => {
             const teamKey = prev.activeTeam === 'A' ? 'teamA' : 'teamB';
+            const newScoreA = prev.activeTeam === 'A' ? prev.teamA.score + points : prev.teamA.score;
+            const newScoreB = prev.activeTeam === 'B' ? prev.teamB.score + points : prev.teamB.score;
+
+            const newRound = {
+                id: Date.now(),
+                team: prev.activeTeam,
+                points: points,
+                totalA: newScoreA,
+                totalB: newScoreB
+            };
+
             return {
                 ...prev,
                 [teamKey]: {
                     ...prev[teamKey],
                     score: prev[teamKey].score + points
-                }
+                },
+                currentRounds: [newRound, ...(prev.currentRounds || [])]
             };
         });
     };
@@ -420,6 +521,7 @@ window.App = () => {
             ...prev,
             teamA: { ...prev.teamA, score: 0 },
             teamB: { ...prev.teamB, score: 0 },
+            currentRounds: [],
             activeTeam: 'A'
         }));
         setVictoryData(null);
@@ -446,6 +548,7 @@ window.App = () => {
                 scoreB={state.teamB.score}
                 activeTeam={state.activeTeam}
                 setActiveTeam={(t) => setState(prev => ({ ...prev, activeTeam: t }))}
+                onOpenRounds={() => setIsRoundsOpen(true)}
             />
 
             <Keypad
@@ -467,6 +570,14 @@ window.App = () => {
                 isOpen={isHistoryOpen}
                 onClose={() => setIsHistoryOpen(false)}
                 history={state.history}
+                teamA={state.teamA}
+                teamB={state.teamB}
+            />
+
+            <RoundsModal
+                isOpen={isRoundsOpen}
+                onClose={() => setIsRoundsOpen(false)}
+                rounds={state.currentRounds}
                 teamA={state.teamA}
                 teamB={state.teamB}
             />
